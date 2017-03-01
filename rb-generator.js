@@ -1,12 +1,13 @@
 var fs = require('fs')
 
-var logo = ' ██████╗  █████╗ ███╗   ██╗ ██████╗ ███████╗    ██████╗ ██████╗  █████╗ ███╗   ██╗██████╗\n ██╔══██╗██╔══██╗████╗  ██║██╔════╝ ██╔════╝    ██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗\n ██████╔╝███████║██╔██╗ ██║██║  ███╗█████╗      ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║\n ██╔══██╗██╔══██║██║╚██╗██║██║   ██║██╔══╝      ██╔══██╗██╔══██╗██╔══██║██║╚██╗██║██║  ██║\n ██║  ██║██║  ██║██║ ╚████║╚██████╔╝███████╗    ██████╔╝██║  ██║██║  ██║██║ ╚████║██████╔╝\n ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝\n\n'
-var description =
+var rb_verison = 1.5
+var rb_logo = ' ██████╗  █████╗ ███╗   ██╗ ██████╗ ███████╗    ██████╗ ██████╗  █████╗ ███╗   ██╗██████╗\n ██╔══██╗██╔══██╗████╗  ██║██╔════╝ ██╔════╝    ██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗\n ██████╔╝███████║██╔██╗ ██║██║  ███╗█████╗      ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║\n ██╔══██╗██╔══██║██║╚██╗██║██║   ██║██╔══╝      ██╔══██╗██╔══██╗██╔══██║██║╚██╗██║██║  ██║\n ██║  ██║██║  ██║██║ ╚████║╚██████╔╝███████╗    ██████╔╝██║  ██║██║  ██║██║ ╚████║██████╔╝\n ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝\n\n'
+var rb_description =
 ' * Range Brand - Official Color Codes for Famous Brands in Iran\n\n' +
-' * RangeBrand.less - http://rangebrand.ir\n * Version - 1.5\n' +
+' * RangeBrand.less - http://rangebrand.ir\n * Version - ' + rb_verison + '\n' +
 ' * Licensed under the MIT license - http://opensource.org/licenses/MIT\n\n' +
 ' * Created by @JavidIzadfar, @setarekarimi1 and @Mehrnooshdsht\n' +
-' * Copyright (c) 2016-2017 IKA Computing Club - http://ikacc.ir\n\n*'
+' * Copyright (c) 2016-2017 IKA Computing Club - http://ikacc.ir\n\n'
 
 
 fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
@@ -15,9 +16,9 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
 
   var RangeBrand = JSON.parse(data)
 
-  var less = '/*\n\n' + logo + description + '/\n\n'
-  var css = '/*\n\n' + logo + description + '/\n\n'
-  var css_min = '/*\n\n' + description + '/\n\n'
+  var less = '/*\n\n' + rb_logo + rb_description + '*/\n\n'
+  var css = '/*\n\n' + rb_logo + rb_description + '*/\n\n'
+  var css_min = '/*\n\n' + rb_description + '*/\n\n'
 
   for (var brand of Object.keys(RangeBrand)) {
 
@@ -43,6 +44,9 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
 
   css_min += css.replace( /\/\*([\s\S]*?)\*\//g , '' ).replace( /\s/g, '')
 
+  console.log('\n');
+  console.log(rb_logo);
+  console.log(rb_description);
 
   fs.writeFile('RangeBrand/less/rangebrand.less', less, function(err) {
       if(err) throw err
@@ -56,5 +60,6 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
       if(err) throw err
       console.log("Minified CSS file was saved!");
   });
+
 
 })
