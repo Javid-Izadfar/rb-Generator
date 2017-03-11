@@ -1,26 +1,36 @@
 var fs = require('fs')
 
-var rb_verison = 1.5
-var rb_logo = ' ██████╗  █████╗ ███╗   ██╗ ██████╗ ███████╗    ██████╗ ██████╗  █████╗ ███╗   ██╗██████╗\n ██╔══██╗██╔══██╗████╗  ██║██╔════╝ ██╔════╝    ██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗\n ██████╔╝███████║██╔██╗ ██║██║  ███╗█████╗      ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║\n ██╔══██╗██╔══██║██║╚██╗██║██║   ██║██╔══╝      ██╔══██╗██╔══██╗██╔══██║██║╚██╗██║██║  ██║\n ██║  ██║██║  ██║██║ ╚████║╚██████╔╝███████╗    ██████╔╝██║  ██║██║  ██║██║ ╚████║██████╔╝\n ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝\n\n'
-var rb_description =
-' * Range Brand - Official Color Codes for Famous Brands in Iran\n\n' +
-' * RangeBrand.less - http://rangebrand.ir\n * Version - ' + rb_verison + '\n' +
-' * Licensed under the MIT license - http://opensource.org/licenses/MIT\n\n' +
-' * Created by @JavidIzadfar, @setarekarimi1 and @Mehrnooshdsht\n' +
-' * Copyright (c) 2016-2017 IKA Computing Club - http://ikacc.ir\n\n'
+let rb_verison = 1.5
+let rb_logo = ' ██████╗  █████╗ ███╗   ██╗ ██████╗ ███████╗    ██████╗ ██████╗  █████╗ ███╗   ██╗██████╗\n ██╔══██╗██╔══██╗████╗  ██║██╔════╝ ██╔════╝    ██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗\n ██████╔╝███████║██╔██╗ ██║██║  ███╗█████╗      ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║\n ██╔══██╗██╔══██║██║╚██╗██║██║   ██║██╔══╝      ██╔══██╗██╔══██╗██╔══██║██║╚██╗██║██║  ██║\n ██║  ██║██║  ██║██║ ╚████║╚██████╔╝███████╗    ██████╔╝██║  ██║██║  ██║██║ ╚████║██████╔╝\n ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝\n\n'
 
+
+function rb_description(type){
+
+  let rb_description = ''
+
+  if (type != 'min.css' ) rb_description += rb_logo
+
+  rb_description +=
+    ' * Range Brand - Official Color Codes for Famous Brands in Iran\n\n' +
+    ' * RangeBrand.' + type + ' - http://rangebrand.ir\n * Version - ' + rb_verison + '\n' +
+    ' * Licensed under the MIT license - http://opensource.org/licenses/MIT\n\n' +
+    ' * Created by @JavidIzadfar, @setarekarimi1 and @Mehrnooshdsht\n' +
+    ' * Copyright (c) 2016-2017 IKA Computing Club - http://ikacc.ir\n\n'
+
+  return rb_description
+}
 
 fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
 
   if (err) throw err
 
-  var RangeBrand = JSON.parse(data)
+  let RangeBrand = JSON.parse(data)
 
-  var less = '/*\n\n' + rb_logo + rb_description + '*/\n\n'
-  var css = '/*\n\n' + rb_logo + rb_description + '*/\n\n'
-  var css_min = '/*\n\n' + rb_description + '*/\n\n'
+  let less = '/*\n\n' + rb_description('less') + '*/\n\n'
+  let css = '/*\n\n' + rb_description('css') + '*/\n\n'
+  let css_min = '/*\n\n' + rb_description('min.css') + '*/\n\n'
 
-  for (var brand of Object.keys(RangeBrand)) {
+  for (let brand of Object.keys(RangeBrand)) {
 
     if ( RangeBrand[brand].colors.length == 1) {
       less += '@rb-' + brand + ': ' + RangeBrand[brand].colors + ';\n'
@@ -45,8 +55,7 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
   css_min += css.replace( /\/\*([\s\S]*?)\*\//g , '' ).replace( /\s/g, '')
 
   console.log('\n');
-  console.log(rb_logo);
-  console.log(rb_description);
+  console.log(rb_description('js'));
 
   fs.writeFile('RangeBrand/less/rangebrand.less', less, function(err) {
       if(err) throw err
@@ -60,6 +69,5 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
       if(err) throw err
       console.log("Minified CSS file was saved!");
   });
-
 
 })
