@@ -1,7 +1,7 @@
 const fs = require('fs')
 const callArgs = process.argv.slice(2)
 
-let rb_verison = callArgs[0] ? callArgs[0] : '1.6'
+let rb_verison = callArgs[0] ? callArgs[0] : '1.8'
 let rb_logo = ' ██████╗  █████╗ ███╗   ██╗ ██████╗ ███████╗    ██████╗ ██████╗  █████╗ ███╗   ██╗██████╗\n ██╔══██╗██╔══██╗████╗  ██║██╔════╝ ██╔════╝    ██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗\n ██████╔╝███████║██╔██╗ ██║██║  ███╗█████╗      ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║\n ██╔══██╗██╔══██║██║╚██╗██║██║   ██║██╔══╝      ██╔══██╗██╔══██╗██╔══██║██║╚██╗██║██║  ██║\n ██║  ██║██║  ██║██║ ╚████║╚██████╔╝███████╗    ██████╔╝██║  ██║██║  ██║██║ ╚████║██████╔╝\n ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝\n\n'
 
 
@@ -27,6 +27,7 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
 
   let RangeBrand = JSON.parse(data)
 
+  let pcss = '/*\n\n' + rb_description('pcss') + '*/\n\n'
   let less = '/*\n\n' + rb_description('less') + '*/\n\n'
   let css = '/*\n\n' + rb_description('css') + '*/\n\n'
   let css_min = '/*\n\n' + rb_description('min.css') + '*/\n\n'
@@ -34,12 +35,13 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
   for (let brand of Object.keys(RangeBrand)) {
 
     if ( RangeBrand[brand].colors.length == 1) {
+      pcss += '$rb-' + brand + ': ' + RangeBrand[brand].colors + ';\n'
       less += '@rb-' + brand + ': ' + RangeBrand[brand].colors + ';\n'
       css += '.rb-' + brand + '{background-color: ' + RangeBrand[brand].colors + '}\n'
       css += '.rb-' + brand + '-text{color: ' + RangeBrand[brand].colors + '}\n'
-
     } else {
       for (var i = 0; i < RangeBrand[brand].colors.length; i++) {
+        pcss += '$rb-' + brand + '-' + (i + 1) + ': ' + RangeBrand[brand].colors[i] + ';\n'
         less += '@rb-' + brand + '-' + (i + 1) + ': ' + RangeBrand[brand].colors[i] + ';\n'
         css += '.rb-' + brand + '-' + (i + 1) + '{background-color: ' + RangeBrand[brand].colors[i] + '}\n'
       }
@@ -48,6 +50,7 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
       }
     }
 
+    pcss += '\n'
     less += '\n'
     css += '\n'
 
@@ -61,6 +64,10 @@ fs.readFile('./RangeBrand/json/rangebrand.json', 'utf8', function(err, data) {
   fs.writeFile('RangeBrand/less/rangebrand.less', less, function(err) {
       if(err) throw err
       console.log("LESS file was saved!");
+  });
+  fs.writeFile('RangeBrand/postcss/rangebrand.pcss', pcss, function(err) {
+      if(err) throw err
+      console.log("PCSS file was saved!");
   });
   fs.writeFile('RangeBrand/css/rangebrand.css', css, function(err) {
       if(err) throw err
